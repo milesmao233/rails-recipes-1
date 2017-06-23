@@ -13,6 +13,11 @@ class Event < ApplicationRecord
  def to_param
    self.friendly_id
  end
+ 
+ belongs_to :category, :optional => true
+
+ has_many :tickets, :dependent => :destroy, :inverse_of => :event
+ accepts_nested_attributes_for :tickets, :allow_destroy => true, :reject_if => :all_blank
 
  protected
 
@@ -20,9 +25,5 @@ class Event < ApplicationRecord
    self.friendly_id ||= SecureRandom.uuid
  end
 
- belongs_to :category, :optional => true
-
- has_many :tickets, :dependent => :destroy
- accepts_nested_attributes_for :tickets, :allow_destroy => true, :reject_if => :all_blank
 
 end
